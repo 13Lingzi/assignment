@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-import os
-from pyltp import SentenceSplitter
-from pyltp import Segmentor
-from pyltp import Postagger
-from pyltp import NamedEntityRecognizer
-from project.util import get_config
-
-# import jieba
-
 
 # 分句
 # def cut_sentence(sentences):
@@ -22,37 +12,24 @@ from project.util import get_config
 
 
 # 分词
-def cut_word(sentence):
-    cws_model_path = os.path.join(get_config('ner','LTP_DATA_DIR'), 'cws.model')  # 分词模型路径，模型名称为`cws.model`
+def cut_word(segmentor,sentence):
     word = []
-    segmentor = Segmentor()  # 初始化实例
-    segmentor.load(cws_model_path)  # 加载模型
-    segmentor.load_with_lexicon(cws_model_path, get_config('ner','lexicon'))  # 加载模型
     word_split = segmentor.segment(sentence)
     for s in '/'.join(word_split).split('/'): word.append(s)
-    segmentor.release()  # 释放模型
     return word
 
 
 # 词性标注
-def pos_tag(word):
-    pos_model_path = os.path.join(get_config('ner','LTP_DATA_DIR'), 'pos.model')  # 词性标注模型路径，模型名称为`pos.model`
-    postagger = Postagger()  # 初始化实例
-    postagger.load(pos_model_path)  # 加载模型
+def pos_tag(postagger,word):
     pos = []
     for s in '\t'.join(postagger.postag(word)).split('\t'): pos.append(s)  # 词性标注
-    postagger.release()  # 释放模型
     return pos
 
 
 # 实体标识
-def ner_tag(word, pos):
-    ner_model_path = os.path.join(get_config('ner','LTP_DATA_DIR'), 'ner.model')  # 命名实体识别模型路径，模型名称为`pos.model`
-    recognizer = NamedEntityRecognizer()  # 初始化实例
-    recognizer.load(ner_model_path)  # 加载模型
+def ner_tag(recognizer,word, pos):
     netags = []
     for s in '\t'.join(recognizer.recognize(word, pos)).split('\t'): netags.append(s)  # 实体识别
-    recognizer.release()  # 释放模型
     return netags
 
 #实体识别:基础3大类，人名，地名，机构名
@@ -99,10 +76,10 @@ def get_entity(netags,word):
     return result
 
 #命名实体识别整个流程
-def ner(sentence):
-    word = cut_word(sentence)
-    pos = pos_tag(word)
-    netags=ner_tag(word,pos)
+def ner(segmentor,postagger,recognizer,sentence):
+    word = cut_word(segmentor,sentence)
+    pos = pos_tag(postagger,word)
+    netags=ner_tag(recognizer,word,pos)
     entity_dict = get_entity(netags, word)
     print(entity_dict)
     position_dict = get_position(entity_dict[2],word,pos)
