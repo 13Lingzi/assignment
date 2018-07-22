@@ -8,3 +8,6 @@ def get_config(section,key):
 
 
 
+def get_up_postion(positon_number):
+
+    return position

@@ -6,6 +6,7 @@ from project.entity.education import Education
 from project.entity.ner_entity import Entity
 from project.entity.Result import Result
 from project.entity.work import Work
+from project.util import get_up_postion
 
 
 #数据库初始化信息
@@ -38,7 +39,7 @@ for i in range(len):
     result.position = cg_director['postion']
     result.sex = cg_director['sex']
     result.age = cg_director['age']
-    result.education = cg_director['education']#写个util来对应实际的最高学历
+    result.education = get_up_postion(cg_director['education'])#写个util来对应实际的最高学历
     result.position_title = cg_director['position_title']
 
     resume = cg_director['resume']
