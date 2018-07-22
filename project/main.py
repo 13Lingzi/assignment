@@ -7,6 +7,7 @@ from project.entity.ner_entity import Entity
 from project.entity.Result import Result
 from project.entity.work import Work
 from project.util import get_up_position
+from project.time import *
 
 
 #数据库初始化信息
@@ -46,6 +47,9 @@ for i in range(len):
 
     # 获取所有机构名
     ner(entity, segmentor, postagger, recognizer, resume)
+
+    # #获取时间
+    # time(entity, segmentor, postagger, resume)
 
     #获取教育经历
 
