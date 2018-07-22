@@ -44,3 +44,7 @@ def edu_detail(word):
         return "博士"
     else:
         return ""
+
+
+def university_ws():
+    return

@@ -25,7 +25,7 @@ class ConnectMysql(object):
         # 执行sql语句
         try:
             with con.cursor() as cursor:
-                sql = "select * from cg_director_test where id="+str(id)
+                sql = "select * from "+get_config('db','table')+" where id="+str(id)
                 cursor.execute(sql)
                 result = cursor.fetchone()
         except:
@@ -40,7 +40,7 @@ class ConnectMysql(object):
         # 执行sql语句
         try:
             with con.cursor() as cursor:
-                sql = "select count(*) from cg_director_test"
+                sql = "select count(*) from "+get_config('db','table')
                 cursor.execute(sql)
                 result = cursor.fetchone()
         except:
