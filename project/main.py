@@ -36,7 +36,7 @@ for i in range(len):
     result.did = i+1
     result.code = cg_director['code']
     result.name = cg_director['name']
-    result.position = cg_director['postion']
+    result.position = cg_director['position']
     result.sex = cg_director['sex']
     result.age = cg_director['age']
     result.education = get_up_position(cg_director['education'])#写个util来对应实际的最高学历
