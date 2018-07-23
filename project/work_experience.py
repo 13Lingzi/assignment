@@ -1,84 +1,123 @@
 from project.ner import *
 from project.time import *
-#提取实体的工作经历，list形式，[{时间：工作单位},{}，{}，{}]
-def time_org(word,pos,netags):
-    #时间和机构之间的关系
-    time_dict=find_time(word,pos)#时间的字典{'11-11': '1956年', '133-135': '于2005年10月', '33-36': '2010年6月至10月',
-    entity_dict = get_entity(netags, word)#人名 地名 机构名
-    org_dict=entity_dict[2]#机构名的字典[{'72/29': '深圳发展银行'}, {'96/41': '深圳发展银行'}, {'119/53': '深圳发展银行'},
-    #最后提取出来一个字典形式吧（时间：机构/关系）
-    #"任"
-    i1=0
-    i2=0
-    ren_list=[]#存放所有“任”出现的下标  #存放的是int类型
-    while(i1<len(word)):
-        if (word[i1]=='任' or word[i1]=='曾任' or word[i1] == '历任' or word[i1] == '就职' or word[i1] =='现任' or word[i1]=='兼任' or word[i1]=='出任' or word[i1]=='先后任' or word[i1]=='就读'or word[i1]=='加入'):
-            #定义一个函数，在分词的i到j之间，找时间和实体以及关系
-            #所以就需要把这个每次出现的词存在一个list中，每次取start为当前下标往前数几个存放时间的距离，往后到下一个任
-            #到下一个任往前呢？还是到下一个任，把时间都存进一个list(time_list)，然后取第一个时间？
-            ren_list.append(i1)#存放所有“任”出现的下标  #存放的是int类型
-        i1+=1
-    print(ren_list)
-    while(i2<len(ren_list)):
-        if(i2==0 and ren_list[i2]<=7 and i2<len(ren_list)-1):#第一个任，并且任所在下标小于7，并且有下一个任
-            date = ren_ren_time(time_dict,0,ren_list[i2+1])#从开头到下一个任出现
-            org = ren_ren_org(org_dict,0,ren_list[i2+1])
-            if(org==''):print()
-            else:
-                print("date:",date)
-                print("org:",org)
-        elif(i2 == len(ren_list)-1):#i是分词中最后一个任了
-            date = ren_ren_time(time_dict,ren_list[i2]-7,len(word))#从i往前数时间距离到句末
-            org = ren_ren_org(org_dict,ren_list[i2],len(word))####应该是i2所在任的下标-7
-            if (org == ''):
-                print()
-            else:
-                print("date:", date)
-                print("org:", org)
-        else:
-            date = ren_ren_time(time_dict,ren_list[i2]-7,ren_list[i2+1])#i2改成i2+1
-            org = ren_ren_org(org_dict,ren_list[i2],ren_list[i2+1])
-            if (org == ''):
-                print()
-            else:
-                print("date:", date)
-                print("org:", org)
-        i2+=1
-def ren_ren_time(time_dict,start,end):#返回在此范围内（两个任之间）最靠前的那个时间
-    #在start到end之间找时间和实体以及关系
-    ''' 找时间字典里面位置在start-end之间的时间，
-    在时间字典里面提取key里面-后面的数字，只要在start-end之间，就把value提取出来。'''
-    time_list=[]#存放start到end之间出现的时间序列
-    time_index=[]#存放时间段在分词中最后的下标
-    temp=end#如果这段话中出现多个时间下标，temp存放最小的那个
+from project.entity.work import Work
+#提取实体的工作经历，list形式，[work1,work2,...]每个work都是一个对象，里面包含了属性：时间，单位，职位
+
+def work_obj(time_input,company_input,position_input):#输入：work对象的属性值 输出：work对象
+    #创建work对象，并给属性赋值
     time=''
-    for key in time_dict:
-        # time_index.append(int(key))
-        index=int(key)
-        if(index>=start and index<=end):#如果时间字典中出现了在范围内的，比较下标，选择下标最小的满足条件的时间段作为时间
-            if(index<temp):
-                temp=index
-            time=time_dict[key]#改到上面
-    print(time)
-    return time
+    company=''
+    position=''
+    work = Work(time,company,position)# new一个work对象
+    work.time=time_input
+    work.company=company_input
+    work.position=position_input
+    return work
 
-def ren_ren_org(org_dict,start,end):#找两个任之间的机构名，只要是机构名的字典里面所有出现的机构名都列出来
-    temp=start
-    org=""
-    index=-1
-    # print('org_dict:=======',org_dict)#org_dict其实是里面元素为dictionary的list
-    for dict in org_dict:
-        index+=1#org_dict  list的下标
-        org_index=int((list(dict)[0].split('/'))[1])#机构名分词中的下标
-        # print(index,"   ",start,"   ",end,"   ")
-        if(org_index>end):
-            break;#因为是list，所以后面的就不需要检验了
-        if (org_index >= start and org_index <= end):
-            # org+=(list(org_dict[index]))[1]
-            # print ((org_dict[index]).values())
-            print(dict[(list(org_dict[index]))[0]])#深圳发展银行
-            # print((list(org_dict[index])))#['41/20']
-            # print(org_dict[index])#{'41/20': '深圳发展银行'}
+def work_relation(segmentor,postagger,recognizer,sentence):#big function
+    work_obj_list=[]
+    word = cut_word(segmentor, sentence)#list
+    pos = pos_tag(postagger, word)#词性
+    netags = ner_tag(recognizer, word, pos)
+    company_list=f_company_list(word,netags)
+    for index_comp in company_list:#list里面每个元素都是str
+        company=(index_comp.split('_'))[1]
+        position=f_position_str(index_comp,pos,word)
+        time=f_time_str(index_comp,word,pos)
+        #每个公司实体都对应一个world对象
+        work=work_obj(time,company,position)
+        print(time, '--', company, '--', position)
+        work_obj_list.append(work)#把上面函数返回的work对象加到list中
+    # print(work_obj_list)
+    return work_obj_list
 
-    # print(org)
-    return org
+
+
+
+
+def f_company_list(word,netags,):
+    #得到company_list，里面每个元素都是字符串：下标_实体
+    company_1=(get_entity1(netags,word))[2]#公司实体
+    company_list=[]
+    temp=""
+    for i in range(0,len(netags)):
+        if(netags[i]=='B-Ni'):
+            start=i  #start--B-Ni
+            while(netags[i]!='E-Ni'):
+                i+=1
+            end=i     #end--E-Ni
+        elif(netags[i]=='Ni'):
+            start=end=i
+        else:
+            start=end=-1
+        #有了start end，找对应坐标word里面的实体是否为company
+        if(start>=0):
+            str1=''
+            for j in range(start,end+1):
+                str1+=word[j]   #实体名称
+            if(str1 in company_1):
+                # temp[end]=str
+                temp=str(end)+'_'+str1
+                company_list.append(temp)
+    # company_list.append(temp)
+    return company_list
+
+
+def f_time_str(index_comp,word,pos):
+    #从公司实体往前推，第一个时间段，只要中间没有句号或者分号，就收为其时间
+    index = int((index_comp.split('_'))[0])#公司实体下标
+    time_list=find_time(word,pos)#时间段结束下标_时间段
+    index_list=[]#存放这句话中时间段结束下标
+    # timeseg_list=[]#存放这句话中时间段，与index_list对应   可能会重复导致删除相同元素
+    for time in time_list:
+        index_list.append(int((time.split('_'))[0]))
+        # timeseg_list.append((time.split('_'))[1])
+    i=index#计数
+    while(pos[i]!='。'):#从后往前推,只要是没有遇到句号，就继续往前推
+        i-=1
+        if(i==0 and pos[i]!='nt'):#从后往前推到第一个词还不是时间，那就说明没有时间了
+            time_str='null'
+            break
+        elif(i==0 and pos[i]=='nt'):#从后往前推，第一个是时间,
+            time_str=word[i]
+            break
+        elif(i in index_list):#推到了这个下标等于时间段的下标
+            xiabiao=index_list.index(i)#i在index_list中的下标，也就对应在Time_list中的下标
+            time_str=(time_list[xiabiao].split('_'))[1]
+            break
+        else:#往前还没有推到时间
+            continue
+    return time_str
+
+
+def f_position_str(index_comp,pos,word):
+    #从公司实体到标点符号(除去顿号，前后括号以及前后引号）
+    index=int((index_comp.split('_'))[0])
+    start=index+1
+    position_str=''
+    for i in range(start,len(word)):
+        if(word[i]=='，' or word[i]=='；' or word[i]=='。'):
+            end=i
+            break
+    for j in range(start,end):
+        position_str+=word[j]
+    return position_str
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

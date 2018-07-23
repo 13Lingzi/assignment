@@ -18,6 +18,8 @@ def ner(entity,segmentor,postagger,recognizer,sentence):
 def education_experience():
     return
 
+
+
 #提取工作经历整体流程
 def work_experience(entity,segmentor,postagger,recognizer,sentence):
     # word = cut_word(sentence)
@@ -28,5 +30,10 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
     entity.netags = ner_tag(recognizer, entity.word, entity.pos)
     # entity_dict = get_entity(netags, word)
     # time_dict = find_time(word, pos)
-    time_org(entity.word, entity.pos, entity.netags)
+    #########
+    entity.work=work_relation(segmentor,postagger,recognizer,sentence)
+    print(entity.work)
+    #########
+    # time_org(entity.word, entity.pos, entity.netags)#调用work_experience中的方法
     # return
+
