@@ -6,7 +6,7 @@ from project.entity.education import Education
 from project.entity.ner_entity import Entity
 from project.entity.Result import Result
 from project.entity.work import Work
-from project.util import get_up_postion
+from project.util import *
 
 
 #数据库初始化信息
@@ -16,6 +16,7 @@ con = cm.connect()
 segmentor = segmentor_initial()
 postagger = postagger_initial()
 recognizer = recognizer_initial()
+parser = parser_initial()
 
 #获取遍历处理信息长度
 len = cm.count(con)['count(*)']
@@ -30,24 +31,26 @@ work_list = []
 result = Result(None,None,None,None,None,None,None,None,education_list,work_list)
 
 for i in range(len):
-
+# i=3
+# if i==3:
     #获取用户信息
     cg_director = cm.read_excel(con, id=i+1)
     result.did = i+1
     result.code = cg_director['code']
     result.name = cg_director['name']
-    result.position = cg_director['postion']
+    result.position = cg_director['position']
     result.sex = cg_director['sex']
     result.age = cg_director['age']
-    result.education = get_up_postion(cg_director['education'])#写个util来对应实际的最高学历
+    result.education = cg_director['education']#写个util来对应实际的最高学历
     result.position_title = cg_director['position_title']
 
-    resume = cg_director['resume']
+    resume = replace_blank(cg_director['resume'])
 
     # 获取所有机构名
     ner(entity, segmentor, postagger, recognizer, resume)
 
     #获取教育经历
+    education_experience(entity,parser,segmentor)
 
     #获取工作经历
 

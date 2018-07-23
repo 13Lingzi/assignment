@@ -1,3 +1,13 @@
+from project.ner import cut_word
+from project.util import *
+from project.entity.education import *
+#依存句法分析
+def parser_tag(parser,word,pos):
+    pars = []
+    arcs = parser.parse(word, pos)
+    for s in '\t'.join("%d" % (arc.head-1) for arc in arcs).split('\t'): pars.append(s)
+    return pars
+
 #可以写成枚举类型
 def find_education(sentence):
     education=[]
@@ -44,6 +54,31 @@ def edu_detail(word):
         return "博士"
     else:
         return ""
+
+def education_detail(entity,parser,segmentor):
+    arcs = parser_tag(parser, entity.word, entity.pos)
+    university = entity.result[3]
+    # for index in range(len(entity.word)):
+    #     print(str(index) + ":" + entity.word[index] + arcs[index])
+    education_list = []
+    if university != None:
+        for s in university:
+            education = Education(s,None,None)
+            education_str=""
+            temp_cut_word = cut_word(segmentor,s)
+            start_index = get_start_index(temp_cut_word,entity.word)
+            end_index = start_index+len(temp_cut_word)-1
+            max_index= get_max_index(arcs,start_index,entity.word)
+            for index in range(max_index-end_index):
+                if judge_wp(entity.word[end_index+index+1]):
+                    break;
+                add_word = entity.word[end_index+index+1]
+                education_str+=add_word
+            education.education = education_str
+            education_list.append(education)
+    return education_list
+
+
 
 
 def university_ws():

@@ -4,6 +4,7 @@ from pyltp import SentenceSplitter
 from pyltp import Segmentor
 from pyltp import Postagger
 from pyltp import NamedEntityRecognizer
+from pyltp import Parser
 from project.util import get_config
 
 # import jieba
@@ -12,7 +13,7 @@ def segmentor_initial():
     cws_model_path = os.path.join(get_config('ner', 'LTP_DATA_DIR'), 'cws.model')  # 分词模型路径，模型名称为`cws.model`
     segmentor = Segmentor()  # 初始化实例
     segmentor.load(cws_model_path)  # 加载模型
-    segmentor.load_with_lexicon(cws_model_path, get_config('ner', 'lexicon'))  # 加载模型
+    # segmentor.load_with_lexicon(cws_model_path, get_config('ner', 'lexicon'))  # 加载模型
     return segmentor
 
 #词性标注模型加载
@@ -29,6 +30,12 @@ def recognizer_initial():
     recognizer = NamedEntityRecognizer()  # 初始化实例
     recognizer.load(ner_model_path)  # 加载模型
     return recognizer
+
+def parser_initial():
+    par_model_path = os.path.join(get_config('ner', 'LTP_DATA_DIR'), 'parser.model')  # 依存句法分析模型路径，模型名称为`parser.model`
+    parser = Parser()  # 初始化实例
+    parser.load(par_model_path)  # 加载模型
+    return parser
 
 #模型释放
 def release_model(segmentor,postagger,recognizer):
