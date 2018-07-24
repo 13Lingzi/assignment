@@ -1,6 +1,9 @@
 from project.ner import *
 from project.education_experience import education_detail
 from project.work_experience import *
+from project.connect_mysql import ConnectMysql
+from project.util import get_config
+
 #命名实体识别整个流程
 def ner(entity,segmentor,postagger,recognizer,sentence):
     entity.word = cut_word(segmentor,sentence)
@@ -39,4 +42,25 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
     #########
     # time_org(entity.word, entity.pos, entity.netags)#调用work_experience中的方法
     return work_list
+
+
+#入库操作
+def insert_table(result,cm,con):
+    #insert_director
+    sql = cm.insert_sql("director",result,None,None,get_config('developer', 'person'))
+    flag = cm.insert_data(con,result,sql,"direcotr")
+
+    #insert_education
+    for s in result.education_list:
+        if flag:
+            sql = cm.insert_sql("education", result, s, None, get_config('developer', 'person'))
+            flag = cm.insert_data(con,result,sql,"education")
+    #insert_work
+    # for s in result.work_list:
+    #     if flag:
+    #         sql = cm.insert_sql("work", result, None, s, get_config('developer', 'person'))
+    #         flag = cm.insert_data(con,result,sql,"work")
+
+
+
 

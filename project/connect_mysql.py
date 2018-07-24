@@ -1,6 +1,6 @@
 import pymysql.cursors
 import pymysql
-from project.util import get_config
+from project.util import get_config,get_now
 
 
 class ConnectMysql(object):
@@ -44,10 +44,38 @@ class ConnectMysql(object):
                 cursor.execute(sql)
                 result = cursor.fetchone()
         except:
-            print("执行read_excel异常")
+            print("执行count异常")
             self.sql_close(con)
         return result
+
+    def insert_data(self,con,result,sql,table):
+        flag = True
+        # 执行sql语句
+        try:
+            with con.cursor() as cursor:
+                cursor.execute(sql)
+                con.commit()
+        except:
+            print("执行"+table+":insert_data异常:id："+str(result.did)+" name:"+result.name+"该条记录出错")
+            con.rollback()
+            self.sql_close(con)
+            flag = False
+        return flag
+
 
     #关闭数据库连接
     def sql_close(self,con):
         con.close();
+
+
+    #获取insert_data_sql语句
+    def insert_sql(self,table,result,education,work,person):
+
+        if table == "director":
+            sql = "insert into "+get_config('db', 'table_director')+"(did,code,name,position,sex,age,education,position_title,create_time,modify_person) values("+str(result.did)+",'"+result.code+"','"+result.name+"','"+result.position+"','"+result.sex+"','"+result.age+"','"+result.education+"','"+result.position_title+"','"+get_now()+"','"+person+"')"
+        elif table =="education":
+            sql = "insert into "+get_config('db', 'table_education')+"(did,university,education,time,create_time,modify_person) values("+str(result.did)+",'"+education.university+"','"+education.education+"','"+education.time+"','"+get_now()+"','"+person+"')"
+        else:
+            sql = "insert into " + get_config('db',
+                                             'table_work') + "(did,company,position,time,create_time,modify_person) values(" + str(result.did) + ",'" + work.company + "','" + work.position + "','" + work.time + "','" + get_now() + "','" + person + "')"
+        return sql

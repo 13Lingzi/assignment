@@ -51,16 +51,16 @@ for i in range(len):
     ner(entity, segmentor, postagger, recognizer, resume)
 
     #获取教育经历
-    education_list = education_experience(entity,parser,segmentor)
+    result.education_list = education_experience(entity,parser,segmentor)
 
     #获取工作经历
-    work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
-
-    result.education_list=education_list
-    result.work_list = work_list
+    # result.work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
+    #
+    # result.education_list=education_list
+    # result.work_list = work_list
 
     #导入数据库
-
+    insert_table(result,cm,con)
 
     #清空
     education_list.clear()

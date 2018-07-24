@@ -1,4 +1,5 @@
 import configparser
+import datetime
 
 #获取配置
 def get_config(section,key):
@@ -61,5 +62,9 @@ def get_up_position(position_number):
     else:
         position="其他"
     return position
+
+def get_now():
+    nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 现在
+    return nowTime
 
 
