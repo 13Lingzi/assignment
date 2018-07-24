@@ -26,7 +26,7 @@ def work_relation(segmentor,postagger,recognizer,sentence):#big function
         time=f_time_str(index_comp,word,pos)
         #每个公司实体都对应一个world对象
         work=work_obj(time,company,position)
-        print(time, '--', company, '--', position)
+        # print(time, '--', company, '--', position)
         work_obj_list.append(work)#把上面函数返回的work对象加到list中
     # print(work_obj_list)
     return work_obj_list

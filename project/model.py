@@ -24,18 +24,19 @@ def education_experience(entity,parser,segmentor):
 
 #提取工作经历整体流程
 def work_experience(entity,segmentor,postagger,recognizer,sentence):
-    # word = cut_word(sentence)
     entity.word = cut_word(segmentor, sentence)
-    # pos = pos_tag(word)
     entity.pos = pos_tag(postagger, entity.word)
-    # netags = ner_tag(word, pos)
     entity.netags = ner_tag(recognizer, entity.word, entity.pos)
     # entity_dict = get_entity(netags, word)
     # time_dict = find_time(word, pos)
     #########
-    entity.work=work_relation(segmentor,postagger,recognizer,sentence)
-    print(entity.work)
+    # entity.work=work_relation(segmentor,postagger,recognizer,sentence)
+    work_list = work_relation(segmentor,postagger,recognizer,sentence)
+    for s in work_list:
+        s.print_work()
+
+    # print(entity.work)
     #########
     # time_org(entity.word, entity.pos, entity.netags)#调用work_experience中的方法
-    return
+    return work_list
 
