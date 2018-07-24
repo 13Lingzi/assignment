@@ -1,5 +1,6 @@
 import configparser
 import datetime
+import sys
 
 #获取配置
 def get_config(section,key):
@@ -36,11 +37,10 @@ def judge_wp(word):
 
 def replace_blank(sentence):
     return sentence.replace(" ","")
-
+'''
 def get_start_index(list1,list2):
     index = 0
     index1 = 0
-
     while(index < len(list1) and index1 < len(list2)):
         if list2[index1] != list1[index]:
              index1+=1
@@ -48,16 +48,45 @@ def get_start_index(list1,list2):
              index+=1
              index1+=1
     return index1-len(list1)+1
+'''
+
+def get_start_index(list_long,list_short):
+    # 两个均为单字分词的list进行匹配，在长list里面找短list，
+    # 若找到，返回匹配处长list中第一个字符的下标，否则为null
+    l = 0#list_long中的index
+    s = 0
+    num = 0  #匹配字符个数
+    while(l<len(list_long) and s<len(list_short)):
+        if(list_short[s] == list_long[l]):  #单个字符匹配
+            s+=1
+            l+=1
+            num+=1
+        else:
+            if(num!=0):   #单个字符不匹配时前面已经有匹配的子串了
+                s=0
+                num=0
+            else:
+                l+=1
+        if(num == len(list_short)):#如果匹配的数量等于短的list长度了，说明匹配完成了
+            start_index=l-s  #匹配开始的地方
+            # break
+            return start_index
+    if(l == len(list_long)):#长的list到头了
+        start_index = -1
+        return start_index
+
+
+
 def get_up_position(position_number):
-    if(position_number=='1'):
+    if(position_number==1):
         position="中专及中专以下"
-    elif(position_number=='2'):
+    elif(position_number==2):
         position="大专"
-    elif(position_number=='3'):
+    elif(position_number==3):
         position="本科"
-    elif(position_number=='4'):
+    elif(position_number==4):
         position="硕士研究生"
-    elif(position_number=='5'):
+    elif(position_number==5):
         position="博士研究生"
     else:
         position="其他"
@@ -67,9 +96,13 @@ def get_now():
     nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 现在
     return nowTime
 
-def change_none(word):
-    if word is None:
-        word = ""
-    return word
+def read_txt():
+    school_name_list=[]
+    with open('.\data\lexicon.txt','r',encoding='UTF-8') as f:
+        for line in f:
+            school_name_list.append(list(line.strip('\n').split(',')))
+    # print(school_name)
+    return school_name_list
+
 
 
