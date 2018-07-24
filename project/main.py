@@ -7,6 +7,7 @@ from project.entity.ner_entity import Entity
 from project.entity.Result import Result
 from project.entity.work import Work
 from project.util import *
+from project.time import *
 
 
 #数据库初始化信息
@@ -41,7 +42,7 @@ for i in range(len):
     result.position = cg_director['position']
     result.sex = cg_director['sex']
     result.age = cg_director['age']
-    result.education = cg_director['education']#写个util来对应实际的最高学历
+    result.education = get_up_position(cg_director['education'])#写个util来对应实际的最高学历
     result.position_title = cg_director['position_title']
 
     resume = replace_blank(cg_director['resume'])
@@ -50,9 +51,10 @@ for i in range(len):
     ner(entity, segmentor, postagger, recognizer, resume)
 
     #获取教育经历
-    education_experience(entity,parser,segmentor)
+    education_list = education_experience(entity,parser,segmentor)
 
     #获取工作经历
+    work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
 
     result.education_list=education_list
     result.work_list = work_list

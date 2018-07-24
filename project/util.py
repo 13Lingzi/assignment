@@ -47,6 +47,19 @@ def get_start_index(list1,list2):
              index+=1
              index1+=1
     return index1-len(list1)+1
-
+def get_up_position(position_number):
+    if(position_number==1):
+        position="中专及中专以下"
+    elif(position_number==2):
+        position="大专"
+    elif(position_number==3):
+        position="本科"
+    elif(position_number==4):
+        position="硕士研究生"
+    elif(position_number==5):
+        position="博士研究生"
+    else:
+        position="其他"
+    return position
 
 

@@ -8,6 +8,8 @@ class Work(object):
         self.company = company
         self.position = position
         self.time = time
+    def print_work(self):
+        print("time:"+self.time+" company:"+self.company+" position:"+self.position)
 
 
 
