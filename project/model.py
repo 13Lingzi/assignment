@@ -9,7 +9,9 @@ def ner(entity,segmentor,postagger,recognizer,sentence):
     entity.word = cut_word(segmentor,sentence)
     entity.pos = pos_tag(postagger,entity.word)
     entity.netags=ner_tag(recognizer,entity.word,entity.pos)
+    #获取了所有的公司名和学校名
     entity.result = get_entity1(entity.netags, entity.word)
+    #把学校拎出来了
     get_university(entity, segmentor,sentence)
     print(entity.result)
     return entity.result
@@ -46,20 +48,25 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
 
 #入库操作
 def insert_table(result,cm,con):
+
     #insert_director
-    sql = cm.insert_sql("director",result,None,None,get_config('developer', 'person'))
-    flag = cm.insert_data(con,result,sql,"direcotr")
+    judge = "director"
+    sql = cm.insert_sql(judge,result,None,None,get_config('developer', 'person'))
+    flag = cm.insert_data(con,result,sql,judge)
 
     #insert_education
+    judge = "education"
     for s in result.education_list:
         if flag:
-            sql = cm.insert_sql("education", result, s, None, get_config('developer', 'person'))
-            flag = cm.insert_data(con,result,sql,"education")
+            sql = cm.insert_sql(judge, result, s, None, get_config('developer', 'person'))
+            flag = cm.insert_data(con,result,sql,judge)
+
     #insert_work
-    # for s in result.work_list:
-    #     if flag:
-    #         sql = cm.insert_sql("work", result, None, s, get_config('developer', 'person'))
-    #         flag = cm.insert_data(con,result,sql,"work")
+    judge = "work"
+    for s in result.work_list:
+        if flag:
+            sql = cm.insert_sql(judge, result, None, s, get_config('developer', 'person'))
+            flag = cm.insert_data(con,result,sql,judge)
 
 
 

@@ -49,15 +49,15 @@ def get_start_index(list1,list2):
              index1+=1
     return index1-len(list1)+1
 def get_up_position(position_number):
-    if(position_number==1):
+    if(position_number=='1'):
         position="中专及中专以下"
-    elif(position_number==2):
+    elif(position_number=='2'):
         position="大专"
-    elif(position_number==3):
+    elif(position_number=='3'):
         position="本科"
-    elif(position_number==4):
+    elif(position_number=='4'):
         position="硕士研究生"
-    elif(position_number==5):
+    elif(position_number=='5'):
         position="博士研究生"
     else:
         position="其他"
@@ -66,5 +66,10 @@ def get_up_position(position_number):
 def get_now():
     nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 现在
     return nowTime
+
+def change_none(word):
+    if word is None:
+        word = ""
+    return word
 
 

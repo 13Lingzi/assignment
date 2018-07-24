@@ -171,6 +171,7 @@ def get_university(Entity, segmentor, sentence):
                     temp_university = ""
                 break;
         cut_word.clear()
+
     Entity.result.append(university)
     Entity.result[2] = [i for i in Entity.result[2] if i != ""]
 

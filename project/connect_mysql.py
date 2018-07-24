@@ -1,6 +1,6 @@
 import pymysql.cursors
 import pymysql
-from project.util import get_config,get_now
+from project.util import get_config,get_now,change_none
 
 
 class ConnectMysql(object):
@@ -69,13 +69,22 @@ class ConnectMysql(object):
 
 
     #获取insert_data_sql语句
-    def insert_sql(self,table,result,education,work,person):
-
-        if table == "director":
+    def insert_sql(self,judge,result,Education,Work,person):
+        sql = ""
+        if judge == "director":
             sql = "insert into "+get_config('db', 'table_director')+"(did,code,name,position,sex,age,education,position_title,create_time,modify_person) values("+str(result.did)+",'"+result.code+"','"+result.name+"','"+result.position+"','"+result.sex+"','"+result.age+"','"+result.education+"','"+result.position_title+"','"+get_now()+"','"+person+"')"
-        elif table =="education":
-            sql = "insert into "+get_config('db', 'table_education')+"(did,university,education,time,create_time,modify_person) values("+str(result.did)+",'"+education.university+"','"+education.education+"','"+education.time+"','"+get_now()+"','"+person+"')"
-        else:
+
+        if judge == "education":
+            Education.time = change_none(Education.time)
+            Education.university = change_none(Education.university)
+            Education.education = change_none(Education.education)
+            return "insert into "+get_config('db', 'table_education')+"(did,university,education,time,create_time,modify_person) values("+str(result.did)+",'"+Education.university+"','"+Education.education+"','"+Education.time+"','"+get_now()+"','"+person+"')"
+
+        if judge == "work":
+            Work.time = change_none(Work.time)
+            Work.company = change_none(Work.company)
+            Work.position = change_none(Work.position)
             sql = "insert into " + get_config('db',
-                                             'table_work') + "(did,company,position,time,create_time,modify_person) values(" + str(result.did) + ",'" + work.company + "','" + work.position + "','" + work.time + "','" + get_now() + "','" + person + "')"
+                                             'table_work') + "(did,company,position,time,create_time,modify_person) values(" + str(result.did) + ",'" + Work.company + "','" + Work.position + "','" + Work.time + "','" + get_now() + "','" + person + "')"
+
         return sql

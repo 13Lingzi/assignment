@@ -54,10 +54,8 @@ for i in range(len):
     result.education_list = education_experience(entity,parser,segmentor)
 
     #获取工作经历
-    # result.work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
-    #
-    # result.education_list=education_list
-    # result.work_list = work_list
+    result.work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
+
 
     #导入数据库
     insert_table(result,cm,con)
