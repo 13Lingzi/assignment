@@ -54,7 +54,7 @@ def edu_detail(word):
         return "博士"
     else:
         return ""
-'''
+
 def education_detail(entity,parser,segmentor):
     arcs = parser_tag(parser, entity.word, entity.pos)
     university = entity.result[3]
@@ -66,7 +66,7 @@ def education_detail(entity,parser,segmentor):
             education = Education(s,None,None)
             education_str=""
             temp_cut_word = cut_word(segmentor,s)
-            start_index = get_start_index(temp_cut_word,entity.word)
+            start_index = get_start_index1(temp_cut_word,entity.word)
             end_index = start_index+len(temp_cut_word)-1
             max_index= get_max_index(arcs,start_index,entity.word)
             for index in range(max_index-end_index):
@@ -77,38 +77,15 @@ def education_detail(entity,parser,segmentor):
             education.education = education_str
             education_list.append(education)
     return education_list
-'''
-
-def education_detail(entity,parser,segmentor):
-    #得到教育对象列表，里面有属性university,deucation,time
-    education_list=[]
 
 
-    return education_list
-
-def get_school(entity,sentence):
-    #看句子中是否出现txt文件中的词，如果出现，就加到school_list中去
-    school_name_list=read_txt()#txt中的学校名
-    school_list=[] #存放sentence中出现的学校名
-    sen=list(sentence)#简历中句子，单字分词
-    # sentence=entity.word#分好的词
-    for school in school_name_list:
-        s=list(school)#学校名单字分词list[’北‘，’京‘，’大‘，’学‘]
-        start_index=get_start_index1(sen,s)
-        if(start_index!=-1):#说明学校在句子中
-            school_list.append(school)
-    print(school_list)
+# def education_detail(entity,parser,segmentor):
+#     #得到教育对象列表，里面有属性university,deucation,time
+#     education_list=[]
+#     return education_list
 
 
 
-
-
-
-
-
-
-
-    return schlool_list
 
 def university_ws():
     return

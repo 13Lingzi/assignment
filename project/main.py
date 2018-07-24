@@ -9,6 +9,7 @@ from project.entity.work import Work
 from project.util import *
 from project.time import *
 
+# read_txt()
 
 #数据库初始化信息
 cm = ConnectMysql()
@@ -31,9 +32,9 @@ education_list = []
 work_list = []
 result = Result(None,None,None,None,None,None,None,None,education_list,work_list)
 
-for i in range(len):
-# i=3
-# if i==3:
+# for i in range(len):
+i=13
+if i==13:
     #获取用户信息
     cg_director = cm.read_excel(con, id=i+1)
     result.did = i+1
@@ -58,7 +59,7 @@ for i in range(len):
 
 
     #导入数据库
-    insert_table(result,cm,con)
+    # insert_table(result,cm,con)
 
     #清空
     education_list.clear()

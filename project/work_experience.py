@@ -57,6 +57,7 @@ def f_company_list(word,netags,):
                 str1+=word[j]   #实体名称
             if(str1 in company_1):
                 # temp[end]=str
+                # print(str1,"in")
                 temp=str(end)+'_'+str1
                 company_list.append(temp)
     # company_list.append(temp)

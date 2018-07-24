@@ -50,7 +50,7 @@ def get_start_index(list1,list2):
     return index1-len(list1)+1
 '''
 
-def get_start_index(list_long,list_short):
+def get_start_index1(list_long,list_short):
     # 两个均为单字分词的list进行匹配，在长list里面找短list，
     # 若找到，返回匹配处长list中第一个字符的下标，否则为null
     l = 0#list_long中的index
