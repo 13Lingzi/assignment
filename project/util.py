@@ -30,25 +30,42 @@ def get_max_index(arcs,start_index,word):
         start_index += 1
     return max_index
 
+#获取依存树最小索引
+# def get_min_index(arcs,start_index,word):
+#     min_index = start_index
+#     temp_index = start_index
+#     while(start_index >= 0):
+#         start_index -= 1
+#         if arcs[start_index] == temp_index:
+#             min_index = start_index
+#
+
+    return max_index
+
+
 def judge_wp(word):
-    if word == "," or word == "、" or word == "。":
+    if word == "," or word == "、" or word == "。" or word =="，":
         return True
     return False
 
 def replace_blank(sentence):
     return sentence.replace(" ","")
-'''
+#list1:短 list2:长
 def get_start_index(list1,list2):
     index = 0
     index1 = 0
+    flag = False
     while(index < len(list1) and index1 < len(list2)):
         if list2[index1] != list1[index]:
-             index1+=1
+            if flag:
+                index = 0
+            flag = False
         else:
-             index+=1
-             index1+=1
-    return index1-len(list1)+1
-'''
+            index+=1
+            flag = True
+        index1+=1
+    return index1-len(list1)
+
 
 def get_start_index1(list_long,list_short):
     # 两个均为单字分词的list进行匹配，在长list里面找短list，
@@ -96,13 +113,33 @@ def get_now():
     nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 现在
     return nowTime
 
+def change_none(word):
+    if word is None:
+        word = ""
+    return word
+
 def read_txt():
     school_name_list=[]
-    with open('.\data\lexicon.txt','r',encoding='UTF-8') as f:
+    with open('.\data\lexicon.txt','r',encoding='UTF-8-sig') as f:
         for line in f:
             school_name_list.append(list(line.strip('\n').split(',')))
     # print(school_name)
     return school_name_list
 
+def get_single_list(word):
+    single_list = []
+    for s in word:
+        single_list.append(s)
+    return single_list
 
 
+
+def get_front_wp(index,list):
+    while(judge_wp(list[index])==False):
+        index-=1
+    return index
+
+def get_back_wp(index,list):
+    while (judge_wp(list[index]) == False):
+        index += 1
+    return index
