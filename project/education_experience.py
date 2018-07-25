@@ -55,27 +55,38 @@ def edu_detail(word):
     else:
         return ""
 
-def education_detail(entity,parser,segmentor):
+def education_detail(entity,parser,segmentor,sentence,postagger):
     arcs = parser_tag(parser, entity.word, entity.pos)
     university = entity.result[3]
     # for index in range(len(entity.word)):
     #     print(str(index) + ":" + entity.word[index] + arcs[index])
     education_list = []
-    if university != None:
+    if len(university) != 0:
         for s in university:
             education = Education(s,None,None)
-            education_str=""
-            temp_cut_word = cut_word(segmentor,s)
-            start_index = get_start_index1(temp_cut_word,entity.word)
-            end_index = start_index+len(temp_cut_word)-1
-            max_index= get_max_index(arcs,start_index,entity.word)
-            for index in range(max_index-end_index):
-                if judge_wp(entity.word[end_index+index+1]):
-                    break;
-                add_word = entity.word[end_index+index+1]
-                education_str+=add_word
+            education_str = university_parser(segmentor,entity.word,arcs,s)
             education.education = education_str
             education_list.append(education)
+    else:
+        education_detail_list = find_education(sentence)
+        # sentence_cut = get_single_list(sentence)
+        # for s in education_detail_list:
+        #     s_cut = get_single_list(edu_detail(s))
+        #     start_index = get_start_index(s_cut,sentence_cut)-1
+        #     front_wp_index = get_front_wp(start_index,sentence_cut)
+        #     back_wp_index = get_back_wp(start_index,sentence_cut)
+        #     new_sentence = sentence[front_wp_index+1:back_wp_index]
+        #     new_sentence_cut = cut_word(segmentor,new_sentence)
+        #     pos = pos_tag(postagger,new_sentence_cut)
+        #     arcs = parser_tag(parser,new_sentence_cut,pos)
+        #     for index in range(len(new_sentence_cut)):
+        #         print(str(index) + ":" + new_sentence_cut[index] + arcs[index])
+        #     for index in range(len(new_sentence_cut)):
+        #         if new_sentence_cut[index] == edu_detail(s):
+        #             s_index = index
+        #
+        #     print(new_sentence)
+        # print(education_detail_list)
     return education_list
 
 
@@ -89,3 +100,17 @@ def education_detail(entity,parser,segmentor):
 
 def university_ws():
     return
+
+
+def university_parser(segmentor,word,arcs,str):
+    education_str = ""
+    temp_cut_word = cut_word(segmentor, str)
+    start_index = get_start_index(temp_cut_word, word)
+    end_index = start_index + len(temp_cut_word)-1
+    max_index = get_max_index(arcs, start_index, word)
+    for index in range(max_index - end_index):
+        if judge_wp(word[end_index + index + 1]):
+            break;
+        add_word = word[end_index + index + 1]
+        education_str += add_word
+    return education_str

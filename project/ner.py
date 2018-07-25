@@ -68,47 +68,47 @@ def get_entity1(netags, word):
 
 
 # 实体识别:基础3大类，人名，地名，机构名
-def get_entity(netags, word):
-    per = {}  # 人名
-    org = {}  # 机构名
-    pla = {}  # 地名
-    result = []
-
-    for index in range(len(netags)):
-        s = netags[index]
-        if "Nh" in s:
-            if "S" in s:
-                flag = False
-                per = word_util(word, index, netags, flag, per)
-                # per.append(entity_dict)
-            elif "B" in s:
-                flag = True
-                per = word_util(word, index, netags, flag, per)
-                # per.append(entity_dict)
-        if "Ni" in s:
-            if "S" in s:
-                flag = False
-                org = word_util(word, index, netags, flag, org)
-                # org.append(entity_dict)
-            elif "B" in s:
-                flag = True
-                org = word_util(word, index, netags, flag, org)
-                # org.append(entity_dict)
-        if "Ns" in s:
-            if "S" in s:
-                flag = False
-                pla = word_util(word, index, netags, flag, pla)
-                # pla.append(entity_dict)
-            elif "B" in s:
-                flag = True
-                pla = word_util(word, index, netags, flag, pla)
-                # pla.append(entity_dict)
-        else:
-            continue
-    result.append(per)
-    result.append(pla)
-    result.append(org)
-    return result
+# def get_entity(netags, word):
+#     per = {}  # 人名
+#     org = {}  # 机构名
+#     pla = {}  # 地名
+#     result = []
+#
+#     for index in range(len(netags)):
+#         s = netags[index]
+#         if "Nh" in s:
+#             if "S" in s:
+#                 flag = False
+#                 per = word_util(word, index, netags, flag, per)
+#                 # per.append(entity_dict)
+#             elif "B" in s:
+#                 flag = True
+#                 per = word_util(word, index, netags, flag, per)
+#                 # per.append(entity_dict)
+#         if "Ni" in s:
+#             if "S" in s:
+#                 flag = False
+#                 org = word_util(word, index, netags, flag, org)
+#                 # org.append(entity_dict)
+#             elif "B" in s:
+#                 flag = True
+#                 org = word_util(word, index, netags, flag, org)
+#                 # org.append(entity_dict)
+#         if "Ns" in s:
+#             if "S" in s:
+#                 flag = False
+#                 pla = word_util(word, index, netags, flag, pla)
+#                 # pla.append(entity_dict)
+#             elif "B" in s:
+#                 flag = True
+#                 pla = word_util(word, index, netags, flag, pla)
+#                 # pla.append(entity_dict)
+#         else:
+#             continue
+#     result.append(per)
+#     result.append(pla)
+#     result.append(org)
+#     return result
 
 
 # 实体修正
@@ -152,49 +152,44 @@ def word_util(word, index, netags, flag, entity_dict):
 
 # 获取学校实体
 # 匹配：大学，学院，学校，研究生院
-# def get_university(Entity, segmentor, sentence):
-#     cut_tag = index_in_sentence('任', sentence)
-#     university = []
-#     temp_university = ""
-#
-#     for index in range(len(Entity.result[2])):
-#
-#         cut_word = ('/'.join(segmentor.segment(Entity.result[2][index])).split('/'))
-#         # print(cut_word)
-#         for index1 in range(len(cut_word)):
-#             university_tag = cut_word[index1]
-#             if university_tag == '大学' or university_tag == '学院' or university_tag == '学校':
-#                 for i in range(index1 + 1): temp_university += cut_word[i]
-#                 if index_in_sentence(temp_university[0], sentence) < cut_tag:
-#                     university.append(temp_university)
-#                     Entity.result[2][index] = ""
-#                     temp_university = ""
-#                 break;
-#         cut_word.clear()
-#
-#     Entity.result.append(university)
-#     Entity.result[2] = [i for i in Entity.result[2] if i != ""]
+def get_university(Entity, segmentor, sentence):
+    cut_tag = index_in_sentence('任', sentence)
+    university = []
+    temp_university = ""
+
+    for index in range(len(Entity.result[2])):
+
+        cut_word = ('/'.join(segmentor.segment(Entity.result[2][index])).split('/'))
+        # print(cut_word)
+        for index1 in range(len(cut_word)):
+            university_tag = cut_word[index1]
+            if university_tag == '大学' or university_tag == '学院' or university_tag == '学校':
+                for i in range(index1 + 1): temp_university += cut_word[i]
+                if index_in_sentence(temp_university[0], sentence) < cut_tag:
+                    university.append(temp_university)
+                    Entity.result[2][index] = ""
+                    temp_university = ""
+                break;
+        cut_word.clear()
+
+    Entity.result.append(university)
+    Entity.result[2] = [i for i in Entity.result[2] if i != ""]
 
 ###############
 #
-def get_university(Entity,segmentor,sentence):
+def get_university1(Entity,segmentor,sentence):
     #看句子中是否出现txt文件中的词，如果出现，就加到school_list中去
     school_name_list=read_txt()#txt中的学校名
     university=[] #存放sentence中出现的学校名
     sen=list(sentence)#简历中句子，单字分词
     # sentence=entity.word#分好的词
     for school in school_name_list:
-        # print('school.type:', type(school))
         s=list(school[0])#学校名单字分词list[’北‘，’京‘，’大‘，’学‘]
-        # print('s:', s)
         start_index=get_start_index1(sen,s)
-        # print("start_index:",start_index)
         if(start_index!=-1):#说明学校在句子中
-            print('school:',school)
             university.append(school)
-    print("university:",university)
     Entity.result.append(university)
-    # return university
+
 ##########
 # 学校实体工具
 # def university_util(cut_word,pos_out):

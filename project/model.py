@@ -17,8 +17,8 @@ def ner(entity,segmentor,postagger,recognizer,sentence):
     return entity.result
 
 #提取学习经历整体流程
-def education_experience(entity,parser,segmentor):
-    education_list = education_detail(entity,parser,segmentor)
+def education_experience(entity,parser,segmentor,sentence,postagger):
+    education_list = education_detail(entity,parser,segmentor,sentence,postagger)
     for s in education_list:
         s.print_education()
     return education_list
@@ -41,6 +41,7 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
         s.print_work()
 
     # print(entity.work)
+
     #########
     # time_org(entity.word, entity.pos, entity.netags)#调用work_experience中的方法
     return work_list
