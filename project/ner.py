@@ -177,18 +177,30 @@ def get_university(Entity, segmentor, sentence):
 
 ###############
 #
-def get_university1(Entity,segmentor,sentence):
+def get_university1(Entity,sentence):
     #看句子中是否出现txt文件中的词，如果出现，就加到school_list中去
     school_name_list=read_txt()#txt中的学校名
     university=[] #存放sentence中出现的学校名
     sen=list(sentence)#简历中句子，单字分词
     # sentence=entity.word#分好的词
     for school in school_name_list:
-        s=list(school[0])#学校名单字分词list[’北‘，’京‘，’大‘，’学‘]
+        s=list(school)#学校名单字分词list[’北‘，’京‘，’大‘，’学‘]
         start_index=get_start_index1(sen,s)
         if(start_index!=-1):#说明学校在句子中
             university.append(school)
-    Entity.result.append(university)
+    if len(Entity.result[3]) != 0:
+        flag = False
+        for school in university:
+            for un in Entity.result[3]:
+                if un == school or un in school or school in un :
+                    flag = True
+            if flag == False:
+                Entity.result[3].append(school)
+    else:
+        for school in university:
+            Entity.result[3].append(school)
+
+    # Entity.result.append(university)
 
 ##########
 # 学校实体工具

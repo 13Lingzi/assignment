@@ -32,8 +32,8 @@ work_list = []
 result = Result(None,None,None,None,None,None,None,None,education_list,work_list)
 
 for i in range(len):
-# i=2
-# if i==2:
+# i=132
+# if i==132:
     #获取用户信息
     cg_director = cm.read_excel(con, id=i+1)
     result.did = i+1
@@ -51,14 +51,14 @@ for i in range(len):
     ner(entity, segmentor, postagger, recognizer, resume)
 
     #获取教育经历
-    # result.education_list = education_experience(entity,parser,segmentor,resume,postagger)
+    result.education_list = education_experience(entity,parser,segmentor,resume,postagger)
 
     #获取工作经历
-    # result.work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
+    result.work_list = work_experience(entity, segmentor, postagger, recognizer, resume)#调用的是model中的方法
 
 
     #导入数据库
-    # insert_table(result,cm,con)
+    insert_table(result,cm,con)
 
     #清空
     education_list.clear()

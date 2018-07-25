@@ -21,7 +21,7 @@ def index_in_sentence(word,sentence):
 #获取依存树的最大索引
 def get_max_index(arcs,start_index,word):
     max_index = start_index
-    while (start_index <= max_index):
+    while (start_index <= max_index and start_index < len(arcs)):
         arc_index = int(arcs[start_index])
         if arc_index > max_index:
             if judge_wp(word[arc_index]):
@@ -122,7 +122,7 @@ def read_txt():
     school_name_list=[]
     with open('.\data\lexicon.txt','r',encoding='UTF-8-sig') as f:
         for line in f:
-            school_name_list.append(list(line.strip('\n').split(',')))
+            school_name_list.append(line.strip('\n').strip())
     # print(school_name)
     return school_name_list
 
