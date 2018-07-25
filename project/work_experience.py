@@ -96,6 +96,7 @@ def f_position_str(index_comp,pos,word):
     index=int((index_comp.split('_'))[0])
     start=index+1
     position_str=''
+    end = start
     for i in range(start,len(word)):
         if(word[i]=='，' or word[i]=='；' or word[i]=='。'):
             end=i

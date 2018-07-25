@@ -3,6 +3,7 @@ from project.education_experience import education_detail
 from project.work_experience import *
 from project.connect_mysql import ConnectMysql
 from project.util import get_config
+from project.check import get_list_id
 
 #命名实体识别整个流程
 def ner(entity,segmentor,postagger,recognizer,sentence):
@@ -70,6 +71,15 @@ def insert_table(result,cm,con):
         if flag:
             sql = cm.insert_sql(judge, result, None, s, get_config('developer', 'person'))
             flag = cm.insert_data(con,result,sql,judge)
+
+def output(cm,con):
+    sql = cm.output_sql()
+    cm.output_excel(con,sql)
+
+
+
+
+
 
 
 

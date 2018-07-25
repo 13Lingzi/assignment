@@ -32,7 +32,7 @@ class ConnectMysql(object):
                 result = cursor.fetchone()
         except:
             print("执行read_excel异常")
-            self.sql_close(con)
+            # self.sql_close(con)
 
         return result
         # print(df.head)
@@ -47,7 +47,7 @@ class ConnectMysql(object):
                 result = cursor.fetchone()
         except:
             print("执行count异常")
-            self.sql_close(con)
+            # self.sql_close(con)
         return result
 
     def insert_data(self,con,result,sql,table):
@@ -60,7 +60,7 @@ class ConnectMysql(object):
         except:
             print("执行"+table+":insert_data异常:id："+str(result.did)+" name:"+result.name+"该条记录出错")
             con.rollback()
-            self.sql_close(con)
+            # self.sql_close(con)
             flag = False
         return flag
 
@@ -90,3 +90,26 @@ class ConnectMysql(object):
                                              'table_work') + "(did,company,position,time,create_time,modify_person) values(" + str(result.did) + ",'" + Work.company + "','" + Work.position + "','" + Work.time + "','" + get_now() + "','" + person + "')"
 
         return sql
+    def output_sql(self):
+        table = get_config('db', 'table')
+        table_director = get_config('db', 'table_director')
+        table_education = get_config('db', 'table_education')
+        table_work = get_config('db', 'table_work')
+        path = get_config('excel','path')
+
+        sql = "select "+table+".*, "+table_director+".education,"+table_education+".* from "+table+" left join "+table_director+" on "+table+".id="+table_director+".did left join "+table_education+" on "+table_director+".did="+table_education+".did  into outfile '"+path+"'"
+        return sql
+
+    def output_excel(self,con,sql):
+        flag = True
+        # 执行sql语句
+        try:
+            with con.cursor() as cursor:
+                cursor.execute(sql)
+                con.commit()
+        except:
+            print("执行导出excel异常")
+            con.rollback()
+            self.sql_close(con)
+            flag = False
+        return flag
