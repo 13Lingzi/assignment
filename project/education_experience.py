@@ -1,6 +1,7 @@
 from project.ner import cut_word
 from project.util import *
 from project.entity.education import *
+from project.time import find_time
 #依存句法分析
 def parser_tag(parser,word,pos):
     pars = []
@@ -61,11 +62,15 @@ def education_detail(entity,parser,segmentor,sentence,postagger):
     # for index in range(len(entity.word)):
     #     print(str(index) + ":" + entity.word[index] + arcs[index])
     education_list = []
+    time_list = find_time(entity.word,entity.pos)
+    print(time_list)
     if len(university) != 0:
         for s in university:
             education = Education(s,None,None)
             education_str = university_parser(segmentor,entity.word,arcs,s)
             education.education = education_str
+            education_time = university_time(time_list,s,sentence)
+            education.time = education_time
             education_list.append(education)
     else:
         education_detail_list = find_education(sentence)
@@ -114,3 +119,18 @@ def university_parser(segmentor,word,arcs,str):
         add_word = word[end_index + index + 1]
         education_str += add_word
     return education_str
+
+def university_time(time_list,s,sentence):
+    time = ""
+    s_index = get_start_index(list(s),list(sentence))
+    wp_index = s_index
+    while (wp_index > 0):
+        if list(sentence)[wp_index] == "。":
+            break;
+        wp_index -=1
+    for value in time_list:
+        time_value = value.split("_")[1]
+        time_index = get_start_index(list(time_value),list(sentence))
+        if time_index > wp_index and time_index < s_index:
+            time += time_value
+    return time

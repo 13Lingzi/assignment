@@ -6,7 +6,7 @@ class Education(object):
         self.time = time
 
     def print_education(self):
-        print("university:"+self.university+" education:"+self.education)
+        print("time:"+self.time+" university:"+self.university+" education:"+self.education)
 
 
 
