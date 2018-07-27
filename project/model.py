@@ -39,7 +39,7 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
     # time_dict = find_time(word, pos)
     #########
     # entity.work=work_relation(segmentor,postagger,recognizer,sentence)
-    work_list = work_relation(segmentor,postagger,recognizer,sentence)
+    work_list = work_relation(entity,segmentor,postagger,recognizer,sentence)
     for s in work_list:
         s.print_work()
 
