@@ -63,7 +63,7 @@ def education_detail(entity,parser,segmentor,sentence,postagger):
     #     print(str(index) + ":" + entity.word[index] + arcs[index])
     education_list = []
     time_list = find_time(entity.word,entity.pos)
-    print(time_list)
+    # print(time_list)
     if len(university) != 0:
         for s in university:
             education = Education(s,None,None)
@@ -125,7 +125,8 @@ def university_time(time_list,s,sentence):
     s_index = get_start_index(list(s),list(sentence))
     wp_index = s_index
     while (wp_index > 0):
-        if list(sentence)[wp_index] == "。":
+        temp = list(sentence)[wp_index]
+        if temp == "。" or temp == ";" or temp =="；":
             break;
         wp_index -=1
     for value in time_list:
