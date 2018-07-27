@@ -14,7 +14,7 @@ def ner(entity,segmentor,postagger,recognizer,sentence):
     entity.result = get_entity1(entity.netags, entity.word)
     #把学校拎出来了
     get_university(entity, segmentor,sentence)
-    get_university1(entity,sentence)
+    # get_university1(entity,sentence)
 
     print(entity.result)
     return entity.result
