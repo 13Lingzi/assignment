@@ -32,10 +32,14 @@ def find_time(word,pos):#entity_dict没用上,分词和词性
             # time_dict[temp]=time_str #time_dic中存放分词中（时间实体开始下标-结束下标：时间实体）
             # temp=str(i-1)
             time=str(i-1)+'_'+time_str#时间段str：结束下标_时间段
-            num_start=int(str(start))
-            num_end=int(str(i-1))
-            if(num_start>1):
-                if(word[num_start-1]=='生于' or word[num_start-2]=='出生' or word[num_end+1]=='生' or word[num_end-1]=='出生'):
+            #start是时间开始下标，i-1是时间结束下标
+            # num_start=int(str(start))
+            # num_end=int(str(i-1))
+            if(start>1):
+                # print("word[start-1]:",word[start-1])
+                # print("word[start-2]:",word[start-2])
+                # print("word[i]:",word[i])
+                if(word[start-1]=='生于' or word[start-2]=='出生' or word[i]=='生' or word[i]=='出生'):
                     continue
                 else:
                     time_list.append(time)
