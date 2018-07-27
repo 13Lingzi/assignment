@@ -14,13 +14,14 @@ def work_obj(time_input,company_input,position_input):#输入：work对象的属
     work.position=position_input
     return work
 
-def work_relation(segmentor,postagger,recognizer,sentence):#big function
+def work_relation(Entity,segmentor,postagger,recognizer,sentence):#big function
     work_obj_list=[]
     word = cut_word(segmentor, sentence)#list
     pos = pos_tag(postagger, word)#词性
     netags = ner_tag(recognizer, word, pos)
-    company_list=f_company_list(word,netags)
+    company_list=f_company_list(Entity,word,netags)
     for index_comp in company_list:#list里面每个元素都是str
+        # print(index_comp)
         company=(index_comp.split('_'))[1]
         position=f_position_str(index_comp,pos,word)
         time=f_time_str(index_comp,word,pos)
@@ -31,15 +32,11 @@ def work_relation(segmentor,postagger,recognizer,sentence):#big function
     # print(work_obj_list)
     return work_obj_list
 
-
-
-
-
-def f_company_list(word,netags,):
+def f_company_list(Entity,word,netags,):
     #得到company_list，里面每个元素都是字符串：下标_实体
-    company_1=(get_entity1(netags,word))[2]#公司实体
+    company_1=Entity.result[2]
     company_list=[]
-    temp=""
+    # temp=""
     for i in range(0,len(netags)):
         if(netags[i]=='B-Ni'):
             start=i  #start--B-Ni
@@ -60,9 +57,9 @@ def f_company_list(word,netags,):
                 # print(str1,"in")
                 temp=str(end)+'_'+str1
                 company_list.append(temp)
-    # company_list.append(temp)
     return company_list
-
+    # return company_1
+#
 
 def f_time_str(index_comp,word,pos):
     #从公司实体往前推，第一个时间段，只要中间没有句号或者分号，就收为其时间
@@ -96,7 +93,7 @@ def f_position_str(index_comp,pos,word):
     index=int((index_comp.split('_'))[0])
     start=index+1
     position_str=''
-    end = start
+    end=start
     for i in range(start,len(word)):
         if(word[i]=='，' or word[i]=='；' or word[i]=='。'):
             end=i
