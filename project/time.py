@@ -27,11 +27,20 @@ def find_time(word,pos):#entity_dict没用上,分词和词性
             for n in range(start, i):
                 time_str+=word[n]
             # print(time_str)
-            # temp=str(start)+'-'+str(i-1)
+            temp=str(start)+'-'+str(i-1)#str(start)是时间开始下标
+            # print(temp)
             # time_dict[temp]=time_str #time_dic中存放分词中（时间实体开始下标-结束下标：时间实体）
-            temp=str(i-1)
+            # temp=str(i-1)
             time=str(i-1)+'_'+time_str#时间段str：结束下标_时间段
-            time_list.append(time)
+            num_start=int(str(start))
+            num_end=int(str(i-1))
+            if(num_start>1):
+                if(word[num_start-1]=='生于' or word[num_start-2]=='出生' or word[num_end+1]=='生' or word[num_end-1]=='出生'):
+                    continue
+                else:
+                    time_list.append(time)
+
+            # time_list.append(time)
             # time_dict[temp]=time_str#时间字典中存放分词中时间段的结束下标
             # print(time_dict)
         else:
