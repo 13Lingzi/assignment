@@ -22,7 +22,7 @@ def ner_tag(recognizer, word, pos):
 
 
 # 实体识别:基础3大类，人名，地名，机构名
-def get_entity1(netags, word):
+def get_entity(netags, word):
     per = []
     org = []
     pla = []
@@ -65,50 +65,6 @@ def get_entity1(netags, word):
     result.append(pla)
     result.append(org)
     return result
-
-
-# 实体识别:基础3大类，人名，地名，机构名
-# def get_entity(netags, word):
-#     per = {}  # 人名
-#     org = {}  # 机构名
-#     pla = {}  # 地名
-#     result = []
-#
-#     for index in range(len(netags)):
-#         s = netags[index]
-#         if "Nh" in s:
-#             if "S" in s:
-#                 flag = False
-#                 per = word_util(word, index, netags, flag, per)
-#                 # per.append(entity_dict)
-#             elif "B" in s:
-#                 flag = True
-#                 per = word_util(word, index, netags, flag, per)
-#                 # per.append(entity_dict)
-#         if "Ni" in s:
-#             if "S" in s:
-#                 flag = False
-#                 org = word_util(word, index, netags, flag, org)
-#                 # org.append(entity_dict)
-#             elif "B" in s:
-#                 flag = True
-#                 org = word_util(word, index, netags, flag, org)
-#                 # org.append(entity_dict)
-#         if "Ns" in s:
-#             if "S" in s:
-#                 flag = False
-#                 pla = word_util(word, index, netags, flag, pla)
-#                 # pla.append(entity_dict)
-#             elif "B" in s:
-#                 flag = True
-#                 pla = word_util(word, index, netags, flag, pla)
-#                 # pla.append(entity_dict)
-#         else:
-#             continue
-#     result.append(per)
-#     result.append(pla)
-#     result.append(org)
-#     return result
 
 
 # 实体修正
@@ -205,6 +161,23 @@ def get_university1(Entity,sentence):
 ##########
 # 学校实体工具
 # def university_util(cut_word,pos_out):
+
+
+#删除单位实体中的大学实体
+def delete_university(entity):
+    university_list = entity.result[3]
+    company_list = entity.result[2]
+    company_list_index = 0
+
+    while(company_list_index < len(company_list)):
+        s1 = company_list[company_list_index]
+        for s in university_list:
+            if s1 == s or s in s1 or s1 in s:
+                company_list.remove(company_list[company_list_index])
+                company_list_index -= 1
+        company_list_index += 1
+    entity.result[2] = company_list
+
 
 
 

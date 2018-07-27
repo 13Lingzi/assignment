@@ -40,7 +40,7 @@ def get_max_index(arcs,start_index,word):
 #             min_index = start_index
 #
 
-    return max_index
+    # return max_index
 
 
 def judge_wp(word):
@@ -120,18 +120,11 @@ def change_none(word):
 
 def read_txt():
     school_name_list=[]
-    with open('.\data\lexicon.txt','r',encoding='UTF-8-sig') as f:
+    with open(get_config('ner', 'lexicon'),'r',encoding='UTF-8-sig') as f:
         for line in f:
             school_name_list.append(line.strip('\n').strip())
     # print(school_name)
     return school_name_list
-
-def get_single_list(word):
-    single_list = []
-    for s in word:
-        single_list.append(s)
-    return single_list
-
 
 
 def get_front_wp(index,list):

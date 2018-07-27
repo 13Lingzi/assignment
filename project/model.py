@@ -11,10 +11,11 @@ def ner(entity,segmentor,postagger,recognizer,sentence):
     entity.pos = pos_tag(postagger,entity.word)
     entity.netags=ner_tag(recognizer,entity.word,entity.pos)
     #获取了所有的公司名和学校名
-    entity.result = get_entity1(entity.netags, entity.word)
+    entity.result = get_entity(entity.netags, entity.word)
     #把学校拎出来了
     get_university(entity, segmentor,sentence)
-    # get_university1(entity,sentence)
+    get_university1(entity,sentence)
+    delete_university(entity)
 
     print(entity.result)
     return entity.result
