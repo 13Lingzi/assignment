@@ -58,7 +58,7 @@ for i in range(len):
 
 
     #导入数据库
-    # insert_table(result,cm,con)
+    insert_table(result,cm,con)
 
 
     #清空

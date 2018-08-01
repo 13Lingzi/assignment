@@ -55,10 +55,11 @@ def work_experience(entity,segmentor,postagger,recognizer,sentence):
 def insert_table(result,cm,con):
 
     #insert_director
-    judge = "director"
-    sql = cm.insert_sql(judge,result,None,None,get_config('developer', 'person'))
-    flag = cm.insert_data(con,result,sql,judge)
+    # judge = "director"
+    # sql = cm.insert_sql(judge,result,None,None,get_config('developer', 'person'))
+    # flag = cm.insert_data(con,result,sql,judge)
 
+    flag = True
     #insert_education
     judge = "education"
     for s in result.education_list:
