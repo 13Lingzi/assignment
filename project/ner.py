@@ -175,7 +175,8 @@ def delete_university(entity):
             if s1 == s or s in s1 or s1 in s:
                 company_list.remove(company_list[company_list_index])
                 company_list_index -= 1
-            company_list_index += 1
+                break
+        company_list_index += 1
     entity.result[2] = company_list
 
 
