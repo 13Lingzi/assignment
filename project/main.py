@@ -32,8 +32,8 @@ work_list = []
 result = Result(None,None,None,None,None,None,None,None,education_list,work_list)
 
 for i in range(len):
-# i=2
-# if i==2:
+# i=26
+# if i==26:
 #     获取用户信息
     cg_director = cm.read_excel(con, id=i+1)
     result.did = i+1
