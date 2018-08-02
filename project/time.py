@@ -1,6 +1,8 @@
 from project.ner import *
 #获取这段话中的时间段及其时间段截止下标
 
+
+#test
 def find_time(word,pos):#entity_dict没用上,分词和词性
     i = 0
     time=''
