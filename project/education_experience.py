@@ -72,26 +72,10 @@ def education_detail(entity,parser,segmentor,sentence,postagger):
             education_time = university_time(time_list,s,sentence)
             education.time = education_time
             education_list.append(education)
-    else:
-        education_detail_list = find_education(sentence)
-        # sentence_cut = get_single_list(sentence)
-        # for s in education_detail_list:
-        #     s_cut = get_single_list(edu_detail(s))
-        #     start_index = get_start_index(s_cut,sentence_cut)-1
-        #     front_wp_index = get_front_wp(start_index,sentence_cut)
-        #     back_wp_index = get_back_wp(start_index,sentence_cut)
-        #     new_sentence = sentence[front_wp_index+1:back_wp_index]
-        #     new_sentence_cut = cut_word(segmentor,new_sentence)
-        #     pos = pos_tag(postagger,new_sentence_cut)
-        #     arcs = parser_tag(parser,new_sentence_cut,pos)
-        #     for index in range(len(new_sentence_cut)):
-        #         print(str(index) + ":" + new_sentence_cut[index] + arcs[index])
-        #     for index in range(len(new_sentence_cut)):
-        #         if new_sentence_cut[index] == edu_detail(s):
-        #             s_index = index
-        #
-        #     print(new_sentence)
-        # print(education_detail_list)
+    for s in education_list:
+        s.university = s.university.strip('"')
+        s.education = s.education.strip('"')
+        s.time = s.time.strip('"')
     return education_list
 
 

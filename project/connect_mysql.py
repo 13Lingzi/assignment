@@ -96,9 +96,10 @@ class ConnectMysql(object):
         table_work = get_config('db', 'table_work')
         path = get_config('excel','path')
 
-        sql = "select "+table_director+".name, "+table_education+".* from "+table_director+" left join "+table_education+" on "+table_director+".did="+table_education+".did into outfile '"+path+"'"
+        # sql = "select "+table_director+".name, "+table_education+".* from "+table_director+" left join "+table_education+" on "+table_director+".did="+table_education+".did into outfile '"+path+"'"
 
-        # sql = "select "+table_director+".name, "+table_work+".* from "+table_director+" left join "+table_work+" on "+table_director+".did="+table_work+".did into outfile '"+path+"'"
+
+        sql = "select "+table_director+".name, "+table_work+".* from "+table_director+" left join "+table_work+" on "+table_director+".did="+table_work+".did into outfile '"+path+"'"
 
         # sql = "select " + table_director + ".* into outfile '" + path + "'"
 
