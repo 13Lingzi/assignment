@@ -30,6 +30,10 @@ def work_relation(Entity,segmentor,postagger,recognizer,sentence):#big function
         # print(time, '--', company, '--', position)
         work_obj_list.append(work)#把上面函数返回的work对象加到list中
     # print(work_obj_list)
+    for s in work_obj_list:
+        s.company = s.company.strip('"')
+        s.position = s.position.strip('"')
+        s.time = s.time.strip('"')
     return work_obj_list
 
 def f_company_list(Entity,word,netags,):
