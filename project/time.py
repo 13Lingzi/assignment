@@ -5,6 +5,7 @@ def find_time(word,pos):#entity_dict没用上,分词和词性
     i = 0
     time=''
     time_list=[]
+    # print(time_list)
     while (i < len(pos)):
         tag = 1
         if (pos[i] == 'nt' or pos[i] == 'p'):
@@ -39,10 +40,13 @@ def find_time(word,pos):#entity_dict没用上,分词和词性
                 # print("word[start-1]:",word[start-1])
                 # print("word[start-2]:",word[start-2])
                 # print("word[i]:",word[i])
-                if(word[start-1]=='生于' or word[start-2]=='出生' or word[i]=='生' or word[i]=='出生'):
+                if(word[start-1]=='生于' or word[start-2]=='出生' ):
                     continue
+                elif(i!=len(pos) and (word[i]=='生' or word[i]=='出生')):
+                    time_list
                 else:
                     time_list.append(time)
+                    # print(time)
 
             # time_list.append(time)
             # time_dict[temp]=time_str#时间字典中存放分词中时间段的结束下标
