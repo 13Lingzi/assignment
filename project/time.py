@@ -46,11 +46,6 @@ def find_time(word,pos):#entity_dict没用上,分词和词性
                     time_list
                 else:
                     time_list.append(time)
-                    # print(time)
-
-            # time_list.append(time)
-            # time_dict[temp]=time_str#时间字典中存放分词中时间段的结束下标
-            # print(time_dict)
         else:
             i += 1
     # print(time_list)
