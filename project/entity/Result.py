@@ -1,6 +1,6 @@
 class Result(object):
 
-    def __init__(self,did,code,name,position,sex,age,education,position_title,education_list,work_list):
+    def __init__(self,did,code,name,position,sex,age,education,position_title,resume,education_list,work_list):
         self.did = did
         self.code = code
         self.name = name
@@ -9,6 +9,7 @@ class Result(object):
         self.age = age
         self.education = education
         self.position_title = position_title
+        self.resume = resume
         self.education_list = education_list
         self.work_list = work_list
 

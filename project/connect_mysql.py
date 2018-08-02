@@ -74,7 +74,7 @@ class ConnectMysql(object):
     def insert_sql(self,judge,result,Education,Work,person):
         sql = ""
         if judge == "director":
-            sql = "insert into "+get_config('db', 'table_director')+"(did,code,name,position,sex,age,education,position_title,create_time,modify_person) values("+str(result.did)+",'"+result.code+"','"+result.name+"','"+result.position+"','"+result.sex+"','"+result.age+"','"+result.education+"','"+result.position_title+"','"+get_now()+"','"+person+"')"
+            sql = "insert into "+get_config('db', 'table_director')+"(did,code,name,position,sex,age,education,position_title,resume,create_time,modify_person) values("+str(result.did)+",'"+result.code+"','"+result.name+"','"+result.position+"','"+result.sex+"','"+result.age+"','"+result.education+"','"+result.position_title+"','"+result.resume+"','"+get_now()+"','"+person+"')"
 
         if judge == "education":
             Education.time = change_none(Education.time)
@@ -91,13 +91,13 @@ class ConnectMysql(object):
 
         return sql
     def output_sql(self):
-        table = get_config('db', 'table')
         table_director = get_config('db', 'table_director')
         table_education = get_config('db', 'table_education')
         table_work = get_config('db', 'table_work')
         path = get_config('excel','path')
 
-        sql = "select "+table+".*, "+table_director+".education,"+table_education+".* from "+table+" left join "+table_director+" on "+table+".id="+table_director+".did left join "+table_education+" on "+table_director+".did="+table_education+".did  into outfile '"+path+"'"
+        sql = "select "+table_director+".name, "+table_education+".* from "+table_director+" left join "+table_education+" on "+table_director+".did="+table_education+".did into outfile '"+path+"'"
+
         # sql = "select " + table + ".*, " + table_director + ".education," + table_work + ".* from " + table + " left join " + table_director + " on " + table + ".id=" + table_director + ".did left join " + table_work + " on " + table_director + ".did=" + table_work + ".did  into outfile '" + path + "'"
         return sql
 
